@@ -3,6 +3,8 @@ package com.example.myapplication;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
@@ -19,10 +21,15 @@ public class MungbeanActivity extends AppCompatActivity {
 
     Button captureBtn;
     Button selectFromGallery;
+    Button processBtn;
     ImageView mgImageView;
     final static int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 1;
     final static int SELECT_CODE = 10;
     Uri imageUri;
+    Bitmap bitmap_capture_mungbean;
+    Bitmap bitmap_process;
+    private Bitmap operation;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,6 +37,7 @@ public class MungbeanActivity extends AppCompatActivity {
 
         captureBtn = (Button) findViewById(R.id.bt_capture);
         selectFromGallery = (Button) findViewById(R.id.bt_select_from_gallery);
+        processBtn = (Button) findViewById(R.id.bt_process_image);
         mgImageView = (ImageView) findViewById(R.id.image_view_mungbean);
 
         selectFromGallery.setOnClickListener(new View.OnClickListener() {
@@ -51,6 +59,14 @@ public class MungbeanActivity extends AppCompatActivity {
                 startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
             }
         });
+        processBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                processImage();
+
+            }
+        });
 
 
     }
@@ -61,8 +77,8 @@ public class MungbeanActivity extends AppCompatActivity {
 
         if(requestCode==CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE && resultCode==RESULT_OK)
         {
-            Bitmap bitmap = (Bitmap) data.getExtras().get("data");
-            mgImageView.setImageBitmap(bitmap);
+            bitmap_capture_mungbean = (Bitmap) data.getExtras().get("data");
+            mgImageView.setImageBitmap(bitmap_capture_mungbean);
         }
         //For selecting image from gallery
         try {
@@ -100,5 +116,32 @@ public class MungbeanActivity extends AppCompatActivity {
         }
         cursor.close();
         return res;
+    }
+
+    public void processImage()
+    {
+        BitmapDrawable abmp = (BitmapDrawable) mgImageView.getDrawable();
+        bitmap_process = abmp.getBitmap();
+
+        operation = Bitmap.createBitmap(bitmap_process.getWidth(),bitmap_process.getHeight(), bitmap_process.getConfig());
+        double red = 0.33;
+        double green = 0.59;
+        double blue = 0.11;
+
+        for (int i = 0; i < bitmap_process.getWidth(); i++) {
+            for (int j = 0; j < bitmap_process.getHeight(); j++) {
+                int p = bitmap_process.getPixel(i, j);
+                int r = Color.red(p);
+                int g = Color.green(p);
+                int b = Color.blue(p);
+
+                r = 100  +  r;
+                g = 100  + g;
+                b = 100  + b;
+
+                operation.setPixel(i, j, Color.argb(Color.alpha(p), r, g, b));
+            }
+        }
+        mgImageView.setImageBitmap(operation);
     }
 }

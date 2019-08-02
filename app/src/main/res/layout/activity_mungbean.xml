@@ -67,6 +67,15 @@
                         android:text="Select"
                         android:textColor="@color/colorPrimaryDark"
                         android:theme="@style/MyButton" />
+                <Button
+                        android:id="@+id/bt_process_image"
+                        style="@style/Widget.AppCompat.Button.Borderless"
+                        android:layout_width="wrap_content"
+                        android:layout_height="70dp"
+
+                        android:text="Process"
+                        android:textColor="@color/colorPrimaryDark"
+                        android:theme="@style/MyButton" />
 
 
 
