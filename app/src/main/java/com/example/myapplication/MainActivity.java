@@ -1,38 +1,56 @@
 package com.example.myapplication;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
+import android.os.CountDownTimer;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.databinding.DataBindingUtil;
+import com.example.myapplication.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
+
+    private ActivityMainBinding mBinding;
+
+    private CountDownTimer mTimer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
 
-        final Button mungbeanBtn = (Button) findViewById(R.id.bt_mungbean);
-        final Button riceBtn = (Button) findViewById(R.id.bt_rice);
+        String[] messages = getResources().getStringArray(R.array.messages);
+        showMessage(messages);
 
-        riceBtn.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                Intent myIntent = new Intent(MainActivity.this, RiceActivity.class);
-                MainActivity.this.startActivity(myIntent);
+        mBinding.btnRice.setOnClickListener(view -> {
+            Intent myIntent = new Intent(MainActivity.this, DetectActivity.class);
+            myIntent.putExtra(Constant.Key.TARGET, Constant.TargetType.RICE);
+            MainActivity.this.startActivity(myIntent);
 
-            }
-        });
-        mungbeanBtn.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                Intent myIntent = new Intent(MainActivity.this, MungbeanActivity.class);
-                MainActivity.this.startActivity(myIntent);
-
-            }
         });
 
+        mBinding.btnMungbean.setOnClickListener(view -> {
+            Intent myIntent = new Intent(MainActivity.this, DetectActivity.class);
+            myIntent.putExtra(Constant.Key.TARGET, Constant.TargetType.MUNG_BEAN);
+            MainActivity.this.startActivity(myIntent);
 
+        });
+    }
 
+    int count = 0;
+    private void showMessage(String[] messages) {
 
+        mTimer = new CountDownTimer(3000, 3000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                if(count == (messages.length - 1)) count = 0;
+                mBinding.tvAppInfo.animateText(messages[count]);
+                count++;
+            }
+
+            @Override
+            public void onFinish() {
+                showMessage(messages);
+            }
+        }.start();
     }
 }

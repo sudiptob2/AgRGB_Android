@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="messages">
+        <item>A little contribute for the farmers</item>
+        <item>We want to make the thing better</item>
+        <item>Let\'s do this</item>
+    </string-array>
+</resources>

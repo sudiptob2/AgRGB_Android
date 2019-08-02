@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">AgRGB</string>
+
+    <string name="label_rice">Rice</string>
+    <string name="label_mungbean">Mungbean</string>
+    <string name="label_detect">Detect</string>
+    <string name="txt_select_image">Select image</string>
+    <string name="txt_choose_option">Choose one of the following</string>
+    <string name="label_gallery">Gallery</string>
+    <string name="label_camera">Camera</string>
 </resources>

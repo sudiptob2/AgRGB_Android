@@ -1,102 +1,92 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/iron"
-        tools:context=".MainActivity">
-<RelativeLayout
+        android:background="@android:color/white">
 
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fitsSystemWindows="true">
-
-    <include
-            android:id="@+id/toolbar"
-            layout="@layout/toolbar"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"/>
-
-    <ScrollView
-            android:layout_below="@+id/toolbar"
-            android:id="@+id/scroll_main_activity"
+        <ImageView
+            android:id="@+id/imageView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="0dp"
+            android:src="@drawable/banner_agrgb"
+            android:scaleType="centerCrop"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintHeight_percent="0.35"
+            tools:ignore="ContentDescription"/>
 
-        <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
+        <com.hanks.htextview.scale.ScaleTextView
+            android:id="@+id/tv_app_info"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="16dp"
+            android:text="@string/app_name"
+            android:textSize="18sp"
+            android:textColor="@android:color/black"
+            android:gravity="center"
+            app:layout_constraintTop_toBottomOf="@+id/imageView"/>
 
-            <FrameLayout
-                    android:id="@+id/frame_main_activity"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/toolbar"
-                    android:layout_centerHorizontal="true">
+        <ImageView
+            android:id="@+id/img_mungbean"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="20dp"
+            android:src="@drawable/img_mungbean"
+            android:scaleType="centerCrop"
+            android:foreground="#66000000"
+            app:layout_constraintTop_toBottomOf="@+id/tv_app_info"
+            app:layout_constraintHeight_percent="0.25"
+            tools:ignore="ContentDescription"/>
 
-                <ImageView
+        <Button
+            android:id="@+id/btn_mungbean"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:text="@string/label_mungbean"
+            android:textColor="@color/colorPrimaryDark"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:background="@drawable/btn_selector"
+            app:layout_constraintStart_toStartOf="@+id/img_mungbean"
+            app:layout_constraintTop_toTopOf="@+id/img_mungbean"
+            app:layout_constraintEnd_toEndOf="@+id/img_mungbean"
+            app:layout_constraintBottom_toBottomOf="@+id/img_mungbean"/>
 
-                        android:id="@+id/imageView"
-                        android:layout_width="match_parent"
-                        android:layout_height="270dp"
-                        android:layout_gravity="center"
-                        android:scaleType="fitXY"
-                        android:src="@drawable/banner_agrgb" />
-            </FrameLayout>
+        <ImageView
+            android:id="@+id/img_rice"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:src="@drawable/img_rice_field"
+            android:scaleType="centerCrop"
+            android:foreground="#66000000"
+            app:layout_constraintTop_toBottomOf="@+id/img_mungbean"
+            app:layout_constraintHeight_percent="0.25"
+            tools:ignore="ContentDescription"/>
 
-            <TableLayout
+        <Button
+            android:id="@+id/btn_rice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:text="@string/label_rice"
+            android:textColor="@color/colorPrimaryDark"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:background="@drawable/btn_selector"
+            app:layout_constraintStart_toStartOf="@+id/img_rice"
+            app:layout_constraintTop_toTopOf="@+id/img_rice"
+            app:layout_constraintEnd_toEndOf="@+id/img_rice"
+            app:layout_constraintBottom_toBottomOf="@+id/img_rice"/>
 
-                    android:id="@+id/tableLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="280dp"
-                    android:layout_alignParentStart="true"
-                    android:stretchColumns="*">
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <TableRow
-                        android:layout_width="match_parent"
-                        android:layout_height="350dp"
-                        android:layout_weight="1">
-
-                    <Button
-
-                            android:id="@+id/bt_rice"
-                            style="@style/Widget.AppCompat.Button.Borderless"
-                            android:layout_width="fill_parent"
-                            android:layout_height="fill_parent"
-
-                            android:text="Rice"
-                            android:textColor="@color/colorPrimaryDark"
-                            android:theme="@style/MyButton" />
-
-
-                </TableRow>
-
-                <TableRow
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="1">
-
-                    <Button
-                            android:id="@+id/bt_mungbean"
-                            style="@style/Widget.AppCompat.Button.Borderless"
-                            android:layout_width="fill_parent"
-                            android:layout_height="fill_parent"
-
-
-                            android:text="Mungbean"
-                            android:textColor="@color/colorPrimaryDark"
-                            android:theme="@style/MyButton" />
-                </TableRow>
-
-            </TableLayout>
-        </LinearLayout>
-    </ScrollView>
-
-</RelativeLayout>
-
-
-</android.support.constraint.ConstraintLayout>
+</layout>

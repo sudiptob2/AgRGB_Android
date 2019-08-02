@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools" xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/white">
+
+        <ImageView
+            android:id="@+id/img_target"
+            android:layout_width="match_parent"
+            android:layout_height="280dp"
+            android:src="@drawable/powdery_sample"
+            android:scaleType="centerCrop"
+            tools:ignore="ContentDescription"/>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_camera"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            app:layout_anchor="@+id/img_target"
+            app:layout_anchorGravity="bottom|end"
+            app:srcCompat="@drawable/ic_camera"
+            app:backgroundTint="@color/colorPrimary"
+            android:tint="@android:color/white"/>
+
+        <TextView
+            android:id="@+id/tv_target_info"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="300dp"
+            android:text="Output info will be shown here"
+            android:textColor="@android:color/black"
+            android:textSize="16sp"
+            android:gravity="center"/>
+
+        <Button
+            android:id="@+id/btn_detect"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:paddingStart="25dp"
+            android:paddingEnd="25dp"
+            android:background="@drawable/btn_selector"
+            android:text="@string/label_detect"
+            android:textColor="@color/colorPrimary"
+            android:textStyle="bold"
+            android:layout_gravity="bottom|center"/>
+
+        <ProgressBar
+            android:id="@+id/pb"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            android:visibility="invisible"
+            android:layout_gravity="center"/>
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+</layout>
