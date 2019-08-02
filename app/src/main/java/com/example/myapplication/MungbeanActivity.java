@@ -28,6 +28,7 @@ public class MungbeanActivity extends AppCompatActivity {
     Uri imageUri;
     Bitmap bitmap_capture_mungbean;
     Bitmap bitmap_process;
+    Bitmap temporary_bitmap;
     private Bitmap operation;
 
     @Override
@@ -78,7 +79,8 @@ public class MungbeanActivity extends AppCompatActivity {
         if(requestCode==CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE && resultCode==RESULT_OK)
         {
             bitmap_capture_mungbean = (Bitmap) data.getExtras().get("data");
-            mgImageView.setImageBitmap(bitmap_capture_mungbean);
+            Bitmap resized = Bitmap.createScaledBitmap(bitmap_capture_mungbean,(int)(bitmap_capture_mungbean.getWidth()*0.40), (int)(bitmap_capture_mungbean.getHeight()*0.4), true);
+            mgImageView.setImageBitmap(resized);
         }
         //For selecting image from gallery
         try {
@@ -121,7 +123,8 @@ public class MungbeanActivity extends AppCompatActivity {
     public void processImage()
     {
         BitmapDrawable abmp = (BitmapDrawable) mgImageView.getDrawable();
-        bitmap_process = abmp.getBitmap();
+        temporary_bitmap = abmp.getBitmap();
+        bitmap_process = Bitmap.createScaledBitmap(temporary_bitmap,(int)(temporary_bitmap.getWidth()*0.40), (int)(temporary_bitmap.getHeight()*0.4), true);
 
         operation = Bitmap.createBitmap(bitmap_process.getWidth(),bitmap_process.getHeight(), bitmap_process.getConfig());
         double red = 0.33;
