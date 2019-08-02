@@ -130,6 +130,9 @@ public class MungbeanActivity extends AppCompatActivity {
         double red = 0.33;
         double green = 0.59;
         double blue = 0.11;
+        int totalPix = 0;
+        int rg,gb,br;
+        int black=0,w=0,yl=0,grey=0;
 
         for (int i = 0; i < bitmap_process.getWidth(); i++) {
             for (int j = 0; j < bitmap_process.getHeight(); j++) {
@@ -138,11 +141,45 @@ public class MungbeanActivity extends AppCompatActivity {
                 int g = Color.green(p);
                 int b = Color.blue(p);
 
-                r = 100  +  r;
-                g = 100  + g;
-                b = 100  + b;
+                //Manupulate pixels for preprocessing
 
-                operation.setPixel(i, j, Color.argb(Color.alpha(p), r, g, b));
+                if (b > 250 && r == 0 && g == 0)
+                {
+                    //continue;
+                   operation.setPixel(i, j, Color.argb(Color.alpha(p), 255, 255, 255));
+                }
+                else
+                {
+                    totalPix++;
+                    rg = (int) Math.abs(r - g);
+                    gb = (int) Math.abs(g - b);
+                    br = (int) Math.abs(b - r);
+                    if (rg <= 5 && blue < 100)
+                    {
+                        black++;
+                        operation.setPixel(i, j, Color.argb(Color.alpha(p), 255, 255, 255));
+                    }
+                    else if (r > 140 && g > 140 && b > 140)
+                    {
+                        w++;
+                        operation.setPixel(i, j, Color.argb(Color.alpha(p), 255, 0, 0));
+                    }
+                    else if (rg > 0 && rg < 10 && r > 98 && g > 98 && b < 190)
+                    {
+                        yl++;
+                        operation.setPixel(i, j, Color.argb(Color.alpha(p),238, 255, 0));
+
+                    }
+                    else if (rg > 0 && rg < 150 && b < 150)
+                    {
+                        grey++;
+                        operation.setPixel(i, j, Color.argb(Color.alpha(p),255, 255, 255));
+
+                    }
+                }
+
+
+               // operation.setPixel(i, j, Color.argb(Color.alpha(p), r, g, b));
             }
         }
         mgImageView.setImageBitmap(operation);

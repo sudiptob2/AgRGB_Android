@@ -44,7 +44,7 @@
                             android:layout_height="270dp"
                             android:layout_gravity="center"
                             android:scaleType="fitXY"
-                            android:src="@drawable/banner_mungbean" />
+                            android:src="@drawable/powdery_sample" />
                 </FrameLayout>
                 <Button
 
