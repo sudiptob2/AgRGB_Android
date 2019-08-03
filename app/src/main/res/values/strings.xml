@@ -8,4 +8,6 @@
     <string name="txt_choose_option">Choose one of the following</string>
     <string name="label_gallery">Gallery</string>
     <string name="label_camera">Camera</string>
+    <string name="label_preprocess">Pre-process</string>
+
 </resources>

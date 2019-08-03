@@ -16,7 +16,7 @@
             android:src="@drawable/banner_agrgb"
             android:scaleType="centerCrop"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintHeight_percent="0.35"
+            app:layout_constraintHeight_percent="0.40"
             tools:ignore="ContentDescription"/>
 
         <com.hanks.htextview.scale.ScaleTextView

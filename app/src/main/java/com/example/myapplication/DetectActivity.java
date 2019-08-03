@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -30,6 +31,8 @@ public class DetectActivity extends AppCompatActivity {
 
     private String mTargetType;
 
+    TextView mTxtDetectionResult;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,18 +43,19 @@ public class DetectActivity extends AppCompatActivity {
 
         mBinding.fabCamera.setOnClickListener(view -> chooseImage());
 
-        mBinding.btnDetect.setOnClickListener(view -> {
+
+        mBinding.btnPreprocess.setOnClickListener(view -> {
             mBinding.pb.setVisibility(View.VISIBLE);
             BitmapDrawable target = (BitmapDrawable) mBinding.imgTarget.getDrawable();
             new Thread(() -> {
 
                 switch (mTargetType) {
                     case Constant.TargetType.RICE:
-                        mOutput = processMungBean(target);
+                        mOutput = preProcessRice(target);
                         break;
 
                     case Constant.TargetType.MUNG_BEAN:
-                        mOutput = processMungBean(target);
+                        mOutput = preProcessMungbean(target);
                         break;
                 }
 
@@ -61,6 +65,30 @@ public class DetectActivity extends AppCompatActivity {
                 });
             }).start();
         });
+
+        mBinding.btnDetect.setOnClickListener(view -> {
+            mBinding.pb.setVisibility(View.VISIBLE);
+            BitmapDrawable target = (BitmapDrawable) mBinding.imgTarget.getDrawable();
+            new Thread(() -> {
+
+                switch (mTargetType) {
+                    case Constant.TargetType.RICE:
+                        mOutput = detectMungbean(target); //Rice function will go here
+                        break;
+
+                    case Constant.TargetType.MUNG_BEAN:
+                        mOutput = detectMungbean(target);
+                        break;
+                }
+
+                runOnUiThread(() -> {
+                    mBinding.pb.setVisibility(View.INVISIBLE);
+                    mBinding.imgTarget.setImageBitmap(mOutput);
+                });
+            }).start();
+        });
+
+
     }
 
     @Override
@@ -110,17 +138,23 @@ public class DetectActivity extends AppCompatActivity {
         return res;
     }
 
-    public Bitmap processMungBean(BitmapDrawable abmp) {
+
+    public Bitmap preProcessRice(BitmapDrawable abmp){
+
         mTemporaryBitmap = abmp.getBitmap();
         mBitmapProcess = Bitmap.createScaledBitmap(mTemporaryBitmap,(int)(mTemporaryBitmap.getWidth()*0.40), (int)(mTemporaryBitmap.getHeight()*0.4), true);
 
         Bitmap output = Bitmap.createBitmap(mBitmapProcess.getWidth(), mBitmapProcess.getHeight(), mBitmapProcess.getConfig());
-        double red = 0.33;
-        double green = 0.59;
-        double blue = 0.11;
-        int totalPix = 0;
-        int rg,gb,br;
-        int black=0,w=0,yl=0,grey=0;
+
+        return output;
+    }
+
+
+    public Bitmap preProcessMungbean (BitmapDrawable abmp){
+        mTemporaryBitmap = abmp.getBitmap();
+        mBitmapProcess = Bitmap.createScaledBitmap(mTemporaryBitmap,(int)(mTemporaryBitmap.getWidth()*0.40), (int)(mTemporaryBitmap.getHeight()*0.4), true);
+
+        Bitmap output = Bitmap.createBitmap(mBitmapProcess.getWidth(), mBitmapProcess.getHeight(), mBitmapProcess.getConfig());
 
         for (int i = 0; i < mBitmapProcess.getWidth(); i++) {
             for (int j = 0; j < mBitmapProcess.getHeight(); j++) {
@@ -128,35 +162,101 @@ public class DetectActivity extends AppCompatActivity {
                 int r = Color.red(p);
                 int g = Color.green(p);
                 int b = Color.blue(p);
-                //Manupulate pixels for preprocessing
 
-                if (b > 250 && r == 0 && g == 0) {
-                    //continue;
-                   output.setPixel(i, j, Color.argb(Color.alpha(p), 255, 255, 255));
-                } else {
-                    totalPix++;
-                    rg = (int) Math.abs(r - g);
-                    gb = (int) Math.abs(g - b);
-                    br = (int) Math.abs(b - r);
-                    if (rg <= 5 && blue < 100) {
-                        black++;
-                        output.setPixel(i, j, Color.argb(Color.alpha(p), 255, 255, 255));
-                    } else if (r > 140 && g > 140 && b > 140) {
-                        w++;
-                        output.setPixel(i, j, Color.argb(Color.alpha(p), 255, 0, 0));
-                    } else if (rg > 0 && rg < 10 && r > 98 && g > 98 && b < 190) {
-                        yl++;
-                        output.setPixel(i, j, Color.argb(Color.alpha(p),238, 255, 0));
-                    } else if (rg > 0 && rg < 150 && b < 150) {
-                        grey++;
-                        output.setPixel(i, j, Color.argb(Color.alpha(p),255, 255, 255));
-                    }
+                if (g < 160 || r < 140 || b > 210)
+                {
+                    output.setPixel(i, j, Color.argb(Color.alpha(p), 0, 0, 255));
+
                 }
-               // operation.setPixel(i, j, Color.argb(Color.alpha(p), r, g, b));
+                else
+                 output.setPixel(i, j, Color.argb(Color.alpha(p), r, g, b));
             }
         }
 
+       return output;
+    }
+
+
+    public Bitmap detectMungbean(BitmapDrawable abmp) {
+        mTemporaryBitmap = abmp.getBitmap();
+        mBitmapProcess = Bitmap.createScaledBitmap(mTemporaryBitmap,(int)(mTemporaryBitmap.getWidth()*0.40), (int)(mTemporaryBitmap.getHeight()*0.4), true);
+
+        Bitmap output = Bitmap.createBitmap(mBitmapProcess.getWidth(), mBitmapProcess.getHeight(), mBitmapProcess.getConfig());
+        int totalPix = 0;
+        int avg = 0, c = 0, w = 0, yl = 0, black = 0, grey = 0, rg, gb, br;
+
+
+
+        for (int i = 0; i < mBitmapProcess.getWidth(); i++) {
+
+            for (int j = 0; j < mBitmapProcess.getHeight(); j++) {
+
+                int p = mBitmapProcess.getPixel(i, j);
+                int red = Color.red(p);
+                int green = Color.green(p);
+                int blue = Color.blue(p);
+                //Manupulate pixels for preprocessing
+
+
+
+                if (blue > 250 && red == 0 && green == 0) {
+                   output.setPixel(i, j, Color.argb(Color.alpha(p), 255, 255, 255));
+                } else {
+                    totalPix++;
+                    rg = Math.abs(red - green);
+                    gb = Math.abs(green - blue);
+                    br = Math.abs(blue - red);
+
+
+                    if (rg <= 5 && blue < 100) {
+                        black++;
+                        output.setPixel(i, j, Color.argb(Color.alpha(p), 0, 0, 0));
+                    } else if (red > 140 && green > 140 && blue > 140) {
+                        w++;
+                        output.setPixel(i, j, Color.argb(Color.alpha(p), 255, 0, 0));
+                    } else if (rg > 0 && rg < 10 && red > 98 && green > 98 && blue < 190) {
+                        yl++;
+                        output.setPixel(i, j, Color.argb(Color.alpha(p),238, 255, 0));
+                    } else if (rg > 0 && rg < 150 && blue < 150) {
+                        grey++;
+                        output.setPixel(i, j, Color.argb(Color.alpha(p),255, 0, 220));
+                    }
+
+                }
+               //This is for any noise. any pixel remaind after these above condition. We print the pixel as black
+
+            }
+        }
+        String diseaseName = detectMungbeanDiseaseName(totalPix,black,w,yl,grey);
+        runOnUiThread(() -> {
+            mBinding.pb.setVisibility(View.INVISIBLE);
+            mBinding.tvTargetInfo.setText(diseaseName);
+        });
+
         return output;
+
+    }
+
+    private String detectMungbeanDiseaseName(int totalPix,int black,int w,int yl,int grey){
+
+        Log.d("Variables: ", String.valueOf(black)+" "+w+" "+yl);
+        double pw = Math.floor(((double)w / (double)totalPix) * 100);
+        double pyl = Math.floor(((double)yl / (double)totalPix) * 100);
+        double pBlack = Math.floor(((double)black / (double)totalPix) * 100);
+        double pGrey = Math.floor(((double)grey / (double)totalPix) * 100);
+        double noise = 100 - (pw + pyl + pBlack + pGrey);
+
+        String diseaseName = "Please Use a good quality Image";
+        if (pw > 60 && pyl <= 25)
+        {
+            diseaseName = "Powdery Mildew";
+        }
+        else if (pw <= 25 && pGrey >= 60)
+        {
+            diseaseName = "Yellow Mosaic";
+        }
+        return diseaseName;
+
     }
 
     private void chooseImage() {

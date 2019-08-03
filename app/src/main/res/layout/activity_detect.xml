@@ -12,7 +12,7 @@
             android:id="@+id/img_target"
             android:layout_width="match_parent"
             android:layout_height="280dp"
-            android:src="@drawable/powdery_sample"
+            android:src="@drawable/mungbean_sample"
             android:scaleType="centerCrop"
             tools:ignore="ContentDescription"/>
 
@@ -37,6 +37,20 @@
             android:textSize="16sp"
             android:gravity="center"/>
 
+
+        <Button
+                android:id="@+id/btn_preprocess"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:paddingStart="25dp"
+                android:paddingEnd="25dp"
+                android:background="@drawable/btn_selector"
+                android:text="@string/label_preprocess"
+                android:textColor="@color/colorPrimary"
+                android:textStyle="bold"
+                android:layout_gravity="bottom|left"
+        />
         <Button
             android:id="@+id/btn_detect"
             android:layout_width="wrap_content"
@@ -48,7 +62,9 @@
             android:text="@string/label_detect"
             android:textColor="@color/colorPrimary"
             android:textStyle="bold"
-            android:layout_gravity="bottom|center"/>
+            android:layout_gravity="bottom|right"
+
+           />
 
         <ProgressBar
             android:id="@+id/pb"
